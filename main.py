@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from routers import auth_router
 from database import engine, Base
 from routers import class_router
+from routers import user_class_router
 
 app = FastAPI()
 
@@ -12,3 +13,4 @@ Base.metadata.create_all(bind=engine)
 
 app.include_router(auth_router.router)
 app.include_router(class_router.router)
+app.include_router(user_class_router.router)

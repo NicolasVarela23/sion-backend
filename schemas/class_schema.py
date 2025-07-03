@@ -14,3 +14,13 @@ class ClaseResponse(ClaseBase):
 
     class Config:
         from_attributes = True
+
+class ClaseOut(BaseModel):
+    id: int
+    titulo: str
+    descripcion: str
+    orden: int
+    habilitada: bool
+
+    class Config:
+        from_attributes = True

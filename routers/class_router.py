@@ -4,8 +4,10 @@ from database import get_db
 from models.class_model import Clase
 from models.user_class_model import UserClase
 from models.user_model import User
-from schemas.class_schema import ClaseCreate, ClaseResponse
+from schemas.class_schema import ClaseCreate, ClaseResponse, ClaseOut
 from routers.auth_router import get_current_user
+from typing import List
+
 
 router = APIRouter()
 
@@ -39,4 +41,21 @@ def obtener_mis_clases(db: Session = Depends(get_db), current_user: User = Depen
     clases = db.query(Clase)\
         .join(UserClase, Clase.id == UserClase.clase_id)\
         .filter(UserClase.user_id == current_user.id, Clase.habilitada == True).all()
+    return clases
+
+
+@router.get("/mis-clases", response_model=List[ClaseOut])
+def obtener_clases_del_usuario(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    clases_ids = db.query(UserClase.clase_id).filter(
+        UserClase.user_id == current_user.id
+    ).subquery()
+
+    clases = db.query(Clase).filter(
+        Clase.id.in_(clases_ids),
+        Clase.habilitada == True
+    ).all()
+
     return clases
