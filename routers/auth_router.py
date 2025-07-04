@@ -8,7 +8,11 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 import os
 
+
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
+ 
 
 SECRET_KEY = os.getenv("SECRET_KEY", "clave_secreta")
 ALGORITHM = "HS256"
